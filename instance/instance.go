@@ -168,7 +168,7 @@ func (h *Instance) ExactImages(images []flux.ImageID) (ImageMap, error) {
 		if !exist {
 			return m, errors.Wrap(flux.ErrInvalidImageID, fmt.Sprintf("image %q does not exist", id))
 		}
-		m[id.Repository()] = []flux.ImageDescription{flux.ImageDescription{ID: id}}
+		m[id.Repository()] = []flux.ImageDescription{{ID: id}}
 	}
 	return m, nil
 }

@@ -36,7 +36,7 @@ func exampleRelease(t *testing.T) flux.Release {
 				Status: flux.ReleaseStatusFailed,
 				Error:  "overall-release-error",
 				PerContainer: []flux.ContainerUpdate{
-					flux.ContainerUpdate{
+					{
 						Container: "container1",
 						Current:   img1a1,
 						Target:    img1a2,

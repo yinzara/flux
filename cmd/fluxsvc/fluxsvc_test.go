@@ -72,31 +72,31 @@ func setup() {
 
 	mockPlatform = &platform.MockPlatform{
 		AllServicesAnswer: []platform.Service{
-			platform.Service{
+			{
 				ID:       flux.ServiceID(helloWorldSvc),
 				IP:       "10.32.1.45",
 				Metadata: map[string]string{},
 				Status:   "ok",
 				Containers: platform.ContainersOrExcuse{
 					Containers: []platform.Container{
-						platform.Container{
+						{
 							Name:  "helloworld",
 							Image: "alpine:latest",
 						},
 					},
 				},
 			},
-			platform.Service{},
+			{},
 		},
 		SomeServicesAnswer: []platform.Service{
-			platform.Service{
+			{
 				ID:       flux.ServiceID(helloWorldSvc),
 				IP:       "10.32.1.45",
 				Metadata: map[string]string{},
 				Status:   "ok",
 				Containers: platform.ContainersOrExcuse{
 					Containers: []platform.Container{
-						platform.Container{
+						{
 							Name:  "helloworld",
 							Image: "alpine:latest",
 						},

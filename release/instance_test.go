@@ -10,14 +10,14 @@ import (
 func TestLockedServices(t *testing.T) {
 	conf := instance.Config{
 		Services: map[flux.ServiceID]instance.ServiceConfig{
-			flux.ServiceID("service1"): instance.ServiceConfig{
+			flux.ServiceID("service1"): {
 				Locked: true,
 			},
-			flux.ServiceID("service2"): instance.ServiceConfig{
+			flux.ServiceID("service2"): {
 				Locked:    true,
 				Automated: true,
 			},
-			flux.ServiceID("service3"): instance.ServiceConfig{
+			flux.ServiceID("service3"): {
 				Automated: true,
 			},
 		},

@@ -10,7 +10,7 @@ import (
 // Just tests that the mock does its job.
 func TestPlatformMock(t *testing.T) {
 	var p = &MockPlatform{
-		AllServicesAnswer: []Service{Service{}},
+		AllServicesAnswer: []Service{{}},
 		SomeServicesArgTest: func([]flux.ServiceID) error {
 			return errors.New("arg fail")
 		},

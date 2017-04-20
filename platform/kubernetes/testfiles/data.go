@@ -47,9 +47,9 @@ func WriteTestFiles(dir string) error {
 // given in the test data.
 func ServiceMap(dir string) map[flux.ServiceID][]string {
 	return map[flux.ServiceID][]string{
-		flux.ServiceID("default/helloworld"):     []string{filepath.Join(dir, "helloworld-deploy.yaml")},
-		flux.ServiceID("default/locked-service"): []string{filepath.Join(dir, "locked-service-deploy.yaml")},
-		flux.ServiceID("default/test-service"):   []string{filepath.Join(dir, "test-service-deploy.yaml")},
+		flux.ServiceID("default/helloworld"):     {filepath.Join(dir, "helloworld-deploy.yaml")},
+		flux.ServiceID("default/locked-service"): {filepath.Join(dir, "locked-service-deploy.yaml")},
+		flux.ServiceID("default/test-service"):   {filepath.Join(dir, "test-service-deploy.yaml")},
 	}
 }
 

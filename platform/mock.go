@@ -99,30 +99,30 @@ func PlatformTestBattery(t *testing.T, wrap func(mock Platform) Platform) {
 	}
 
 	serviceAnswer := []Service{
-		Service{
+		{
 			ID:       flux.ServiceID("foobar/hello"),
 			IP:       "10.32.1.45",
 			Metadata: map[string]string{},
 			Status:   "ok",
 			Containers: ContainersOrExcuse{
 				Containers: []Container{
-					Container{
+					{
 						Name:  "frobnicator",
 						Image: "quay.io/example.com/frob:v0.4.5",
 					},
 				},
 			},
 		},
-		Service{},
+		{},
 	}
 
 	expectedSyncDef := SyncDef{
 		Actions: []SyncAction{
-			SyncAction{
+			{
 				ResourceID: "deployment/foo/bar",
 				Delete:     []byte("delete this"),
 			},
-			SyncAction{
+			{
 				ResourceID: "service/foo/bar",
 				Apply:      []byte("apply this"),
 			},

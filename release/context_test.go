@@ -30,7 +30,7 @@ func TestCloneCommitAndPush(t *testing.T) {
 	}
 
 	// change a file and try again
-	for name, _ := range testfiles.Files {
+	for name := range testfiles.Files {
 		if err = execCommand("rm", filepath.Join(ctx.WorkingDir, name)); err != nil {
 			t.Fatal(err)
 		}

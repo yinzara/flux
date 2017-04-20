@@ -68,7 +68,7 @@ type ServiceIDSet map[ServiceID]struct{}
 
 func (s ServiceIDSet) String() string {
 	var ids []string
-	for id, _ := range s {
+	for id := range s {
 		ids = append(ids, string(id))
 	}
 	return "{" + strings.Join(ids, ", ") + "}"

@@ -71,7 +71,7 @@ func TestSyncMalformed(t *testing.T) {
 	kube, mock := setup(t)
 	err := kube.Sync(platform.SyncDef{
 		Actions: []platform.SyncAction{
-			platform.SyncAction{
+			{
 				ResourceID: "foobar",
 				Apply:      []byte("garbage"),
 			},
@@ -89,7 +89,7 @@ func TestSyncOrder(t *testing.T) {
 	kube, mock := setup(t)
 	if err := kube.Sync(platform.SyncDef{
 		Actions: []platform.SyncAction{
-			platform.SyncAction{
+			{
 				ResourceID: "foobar",
 				Delete:     deploymentDef("delete first"),
 				Apply:      deploymentDef("apply last"),
@@ -100,8 +100,8 @@ func TestSyncOrder(t *testing.T) {
 	}
 
 	expected := []command{
-		command{"delete", "delete first"},
-		command{"apply", "apply last"},
+		{"delete", "delete first"},
+		{"apply", "apply last"},
 	}
 	if !reflect.DeepEqual(expected, mock.commands) {
 		t.Errorf("expected commands:\n%#v\ngot:\n%#v", expected, mock.commands)
@@ -116,12 +116,12 @@ func TestSkipOnError(t *testing.T) {
 
 	def := platform.SyncDef{
 		Actions: []platform.SyncAction{
-			platform.SyncAction{
+			{
 				ResourceID: "fail in middle",
 				Delete:     deploymentDef("should fail"),
 				Apply:      deploymentDef("skipped"),
 			},
-			platform.SyncAction{
+			{
 				ResourceID: "proceed",
 				Apply:      deploymentDef("apply works"),
 			},
@@ -139,9 +139,9 @@ func TestSkipOnError(t *testing.T) {
 	}
 
 	expected := []command{
-		command{"delete", "should fail"},
+		{"delete", "should fail"},
 		// skip to next resource after failure
-		command{"apply", "apply works"},
+		{"apply", "apply works"},
 	}
 	if !reflect.DeepEqual(expected, mock.commands) {
 		t.Errorf("expected commands:\n%#v\ngot:\n%#v", expected, mock.commands)

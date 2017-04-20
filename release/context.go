@@ -144,7 +144,7 @@ func (rc *ReleaseContext) SelectServices(results flux.ReleaseResult, logStatus s
 	}
 
 	// Mark anything left over as skipped
-	for id, _ := range filteredDefined {
+	for id := range filteredDefined {
 		logStatus("Skipping service %s as it is not in the running system", id)
 		results[id] = flux.ServiceResult{
 			Status: flux.ReleaseStatusSkipped,

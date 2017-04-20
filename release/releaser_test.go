@@ -28,11 +28,11 @@ var (
 		ID: hwSvcID,
 		Containers: platform.ContainersOrExcuse{
 			Containers: []platform.Container{
-				platform.Container{
+				{
 					Name:  "helloworld",
 					Image: oldImage,
 				},
-				platform.Container{
+				{
 					Name:  "sidecar",
 					Image: "quay.io/weaveworks/sidecar:master-a000002",
 				},
@@ -49,7 +49,7 @@ var (
 		ID: lockedSvcID,
 		Containers: platform.ContainersOrExcuse{
 			Containers: []platform.Container{
-				platform.Container{
+				{
 					Name:  "locked-service",
 					Image: oldLockedImg,
 				},
@@ -61,7 +61,7 @@ var (
 		ID: "default/test-service",
 		Containers: platform.ContainersOrExcuse{
 			Containers: []platform.Container{
-				platform.Container{
+				{
 					Name:  "test-service",
 					Image: "quay.io/weaveworks/test-service:1",
 				},
@@ -78,11 +78,11 @@ var (
 	newImageID, _ = flux.ParseImageID("quay.io/weaveworks/helloworld:master-a000002")
 	timeNow       = time.Now()
 	mockRegistry  = registry.NewMockRegistry([]flux.Image{
-		flux.Image{
+		{
 			ImageID:   newImageID,
 			CreatedAt: &timeNow,
 		},
-		flux.Image{
+		{
 			ImageID:   newLockedID,
 			CreatedAt: &timeNow,
 		},
@@ -150,7 +150,7 @@ func Test_FilterLogic(t *testing.T) {
 				flux.ServiceID("default/helloworld"): flux.ServiceResult{
 					Status: flux.ReleaseStatusSuccess,
 					PerContainer: []flux.ContainerUpdate{
-						flux.ContainerUpdate{
+						{
 							Container: "helloworld",
 							Current:   oldImageID,
 							Target:    newImageID,
@@ -178,7 +178,7 @@ func Test_FilterLogic(t *testing.T) {
 				flux.ServiceID("default/helloworld"): flux.ServiceResult{
 					Status: flux.ReleaseStatusSuccess,
 					PerContainer: []flux.ContainerUpdate{
-						flux.ContainerUpdate{
+						{
 							Container: "helloworld",
 							Current:   oldImageID,
 							Target:    newImageID,
@@ -206,7 +206,7 @@ func Test_FilterLogic(t *testing.T) {
 				flux.ServiceID("default/helloworld"): flux.ServiceResult{
 					Status: flux.ReleaseStatusSuccess,
 					PerContainer: []flux.ContainerUpdate{
-						flux.ContainerUpdate{
+						{
 							Container: "helloworld",
 							Current:   oldImageID,
 							Target:    newImageID,
@@ -237,7 +237,7 @@ func Test_FilterLogic(t *testing.T) {
 				flux.ServiceID("default/helloworld"): flux.ServiceResult{
 					Status: flux.ReleaseStatusSuccess,
 					PerContainer: []flux.ContainerUpdate{
-						flux.ContainerUpdate{
+						{
 							Container: "helloworld",
 							Current:   oldImageID,
 							Target:    newImageID,
@@ -266,7 +266,7 @@ func Test_FilterLogic(t *testing.T) {
 				flux.ServiceID("default/helloworld"): flux.ServiceResult{
 					Status: flux.ReleaseStatusSuccess,
 					PerContainer: []flux.ContainerUpdate{
-						flux.ContainerUpdate{
+						{
 							Container: "helloworld",
 							Current:   oldImageID,
 							Target:    newImageID,
@@ -318,11 +318,11 @@ func Test_ImageStatus(t *testing.T) {
 	}
 
 	upToDateRegistry := registry.NewMockRegistry([]flux.Image{
-		flux.Image{
+		{
 			ImageID:   oldImageID,
 			CreatedAt: &timeNow,
 		},
-		flux.Image{
+		{
 			ImageID:   sidecarImageID,
 			CreatedAt: &timeNow,
 		},
@@ -460,7 +460,7 @@ func Test_LogEvent(t *testing.T) {
 			flux.ServiceID("default/helloworld"): flux.ServiceResult{
 				Status: flux.ReleaseStatusSuccess,
 				PerContainer: []flux.ContainerUpdate{
-					flux.ContainerUpdate{
+					{
 						Container: "helloworld",
 						Current:   oldImageID,
 						Target:    newImageID,
