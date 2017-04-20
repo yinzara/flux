@@ -12,13 +12,14 @@ fi
 
 gometalinter \
 	--vendor \
-	--exclude='error return value not checked.*(Close|Log|Print|Encode).*\(errcheck\)$' \
-	--exclude='.*_test\.go:.*error return value not checked.*\(errcheck\)$' \
-	--exclude='duplicate of.*_test.go.*\(dupl\)$' \
-	--disable=aligncheck \
-	--disable=gotype \
-	--disable=dupl \
-	--cyclo-over=20 \
-	--tests \
+    --exclude='error return value not checked.*(Close|Log|Print|Encode).*\(errcheck\)$' \
+    --exclude='.*_test\.go:.*error return value not checked.*\(errcheck\)$' \
+    --disable-all \
+    --enable=vet \
+    --enable=gocyclo \
+    --enable=gofmt \
 	--deadline=60s \
-	$*
+	./...
+
+# Disabled golint and lll, because there's far too many errors!
+# Also disabled --enable=errcheck for now

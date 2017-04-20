@@ -30,13 +30,19 @@ release-bins:
 clean:
 	go clean
 	rm -rf ./build
+	rm -rf ./lint
 
 realclean: clean
 	rm -rf ./cache
 
-test:
+test: $(GOPATH)/bin/gometalinter
 	export PATH="$$PATH:$$PWD/cmd/fluxsvc"; \
+	./lint && \
 	go test -v ${TEST_FLAGS} $(shell go list ./... | grep -v "^github.com/weaveworks/flux/vendor" | sort -u)
+
+$(GOPATH)/bin/gometalinter:
+	go get github.com/alecthomas/gometalinter
+	gometalinter --update --install
 
 build/migrations.tar: $(MIGRATIONS)
 	tar cf $@ db/migrations
