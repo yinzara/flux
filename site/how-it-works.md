@@ -74,13 +74,17 @@ configuration of the cluster to deploy the new images.
 Images can be "locked" to a specific version. "locked" images won't be
 updated by automated or manual means.
 
+Image tags can be filtered to a specific pattern on a per-container
+basis. For these containers, the latest released tag that matches the
+pattern will be released.
+
 # Weave Cloud only
 
 ## Slack integration
 
 Flux integrates with Slack. A Slack API endpoint is required.
 
-Flux will announce to slack when changes have occured.
+Flux will announce to Slack when changes have occured.
 
 ## Auditing
 
