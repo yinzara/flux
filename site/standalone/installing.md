@@ -1,8 +1,3 @@
----
-title: Installing Weave Flux Manually
-menu_order: 10
----
-
 Flux comes in several parts:
 
 -   the command-line client **fluxctl**

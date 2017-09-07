@@ -1,8 +1,3 @@
----
-title: Using Weave Flux
-menu_order: 40
----
-
 All of the features of Flux are accessible from within
 [Weave Cloud](https://cloud.weave.works).
 
@@ -49,19 +44,19 @@ Kubernetes, this means a {deployment, service} pairing.
 
 # Viewing Services
 
-The first thing to do is to check whether Flux can see any running 
+The first thing to do is to check whether Flux can see any running
 services. To do this, use the `list-services` subcommand:
 
 ```sh
-$ fluxctl list-services                   
+$ fluxctl list-services
 SERVICE             CONTAINER   IMAGE                                         RELEASE  POLICY
-default/flux        fluxd       quay.io/weaveworks/fluxd:latest               ready    
-                    fluxsvc     quay.io/weaveworks/fluxsvc:latest                      
-default/helloworld  helloworld  quay.io/weaveworks/helloworld:master-a000001  ready    
-                    sidecar     quay.io/weaveworks/sidecar:master-a000002              
-default/kubernetes                                                                     
-default/memcached   memcached   memcached:1.4.25                              ready    
-default/nats        nats        nats:0.9.4                                    ready    
+default/flux        fluxd       quay.io/weaveworks/fluxd:latest               ready
+                    fluxsvc     quay.io/weaveworks/fluxsvc:latest
+default/helloworld  helloworld  quay.io/weaveworks/helloworld:master-a000001  ready
+                    sidecar     quay.io/weaveworks/sidecar:master-a000002
+default/kubernetes
+default/memcached   memcached   memcached:1.4.25                              ready
+default/nats        nats        nats:0.9.4                                    ready
 ```
 
 Note that the actual images running will depend on your cluster.
@@ -74,24 +69,24 @@ of the image are running.
 ```sh
 $ fluxctl list-images --service default/helloworld
                                 SERVICE             CONTAINER   IMAGE                          CREATED
-                                default/helloworld  helloworld  quay.io/weaveworks/helloworld  
+                                default/helloworld  helloworld  quay.io/weaveworks/helloworld
                                                                 |   master-9a16ff945b9e        20 Jul 16 13:19 UTC
                                                                 |   master-b31c617a0fe3        20 Jul 16 13:19 UTC
                                                                 |   master-a000002             12 Jul 16 17:17 UTC
                                                                 '-> master-a000001             12 Jul 16 17:16 UTC
-                                                    sidecar     quay.io/weaveworks/sidecar     
+                                                    sidecar     quay.io/weaveworks/sidecar
                                                                 '-> master-a000002             23 Aug 16 10:05 UTC
                                                                     master-a000001             23 Aug 16 09:53 UTC
 
 ```
 
-The arrows will point to the version that is currently running 
+The arrows will point to the version that is currently running
 alongside a list of other versions and their timestamps.
 
 # Releasing a Service
 
-We can now go ahead and update a service with the `release` subcommand. 
-This will check whether each service needs to be updated, and if so, 
+We can now go ahead and update a service with the `release` subcommand.
+This will check whether each service needs to be updated, and if so,
 write the new configuration to the repository.
 
 ```sh
@@ -102,14 +97,14 @@ Applied 7dc025c61fdbbfc2c32f792ad61e6ff52cf0590a
 SERVICE             STATUS   UPDATES
 default/helloworld  success  helloworld: quay.io/weaveworks/helloworld:master-a000001 -> master-9a16ff945b9e
 
-$ fluxctl list-images --service default/helloworld    
+$ fluxctl list-images --service default/helloworld
 SERVICE             CONTAINER   IMAGE                          CREATED
-default/helloworld  helloworld  quay.io/weaveworks/helloworld  
+default/helloworld  helloworld  quay.io/weaveworks/helloworld
                                 '-> master-9a16ff945b9e        20 Jul 16 13:19 UTC
                                     master-b31c617a0fe3        20 Jul 16 13:19 UTC
                                     master-a000002             12 Jul 16 17:17 UTC
                                     master-a000001             12 Jul 16 17:16 UTC
-                    sidecar     quay.io/weaveworks/sidecar     
+                    sidecar     quay.io/weaveworks/sidecar
                                 '-> master-a000002             23 Aug 16 10:05 UTC
                                     master-a000001             23 Aug 16 09:53 UTC
 
@@ -120,7 +115,7 @@ releasing a service. This is handy to provide extra context in the
 notifications and history.
 
 See `fluxctl release --help` for more information.
- 
+
 # Turning on Automation
 
 Automation can be easily controlled from within
@@ -132,17 +127,17 @@ with the `automate` subcommand.
 $ fluxctl automate --service=default/helloworld
 Commit pushed: af4bf73
 SERVICE             STATUS   UPDATES
-default/helloworld  success  
+default/helloworld  success
 
-$ fluxctl list-services --namespace=default         
+$ fluxctl list-services --namespace=default
 SERVICE             CONTAINER   IMAGE                                              RELEASE  POLICY
-default/flux        fluxd       quay.io/weaveworks/fluxd:latest                    ready    
-                    fluxsvc     quay.io/weaveworks/fluxsvc:latest                           
+default/flux        fluxd       quay.io/weaveworks/fluxd:latest                    ready
+                    fluxsvc     quay.io/weaveworks/fluxsvc:latest
 default/helloworld  helloworld  quay.io/weaveworks/helloworld:master-9a16ff945b9e  ready    automated
-                    sidecar     quay.io/weaveworks/sidecar:master-a000002                   
-default/kubernetes                                                                          
-default/memcached   memcached   memcached:1.4.25                                   ready    
-default/nats        nats        nats:0.9.4                                         ready    
+                    sidecar     quay.io/weaveworks/sidecar:master-a000002
+default/kubernetes
+default/memcached   memcached   memcached:1.4.25                                   ready
+default/nats        nats        nats:0.9.4                                         ready
 ```
 
 We can see that the `list-services` subcommand reports that the
@@ -158,17 +153,17 @@ Turning off automation is performed with the `deautomate` command:
  $ fluxctl deautomate --service=default/helloworld
 Commit pushed: a54ef2c
 SERVICE             STATUS   UPDATES
-default/helloworld  success  
+default/helloworld  success
 
- $ fluxctl list-services --namespace=default      
+ $ fluxctl list-services --namespace=default
 SERVICE             CONTAINER   IMAGE                                              RELEASE  POLICY
-default/flux        fluxd       quay.io/weaveworks/fluxd:latest                    ready    
-                    fluxsvc     quay.io/weaveworks/fluxsvc:latest                           
-default/helloworld  helloworld  quay.io/weaveworks/helloworld:master-9a16ff945b9e  ready    
-                    sidecar     quay.io/weaveworks/sidecar:master-a000002                   
-default/kubernetes                                                                          
-default/memcached   memcached   memcached:1.4.25                                   ready    
-default/nats        nats        nats:0.9.4                                         ready  
+default/flux        fluxd       quay.io/weaveworks/fluxd:latest                    ready
+                    fluxsvc     quay.io/weaveworks/fluxsvc:latest
+default/helloworld  helloworld  quay.io/weaveworks/helloworld:master-9a16ff945b9e  ready
+                    sidecar     quay.io/weaveworks/sidecar:master-a000002
+default/kubernetes
+default/memcached   memcached   memcached:1.4.25                                   ready
+default/nats        nats        nats:0.9.4                                         ready
 ```
 
 We can see tha the service is no longer automated.
@@ -182,7 +177,7 @@ service. Changes made in the file will still be synced.
 $ fluxctl lock --service=default/helloworld
 Commit pushed: d726722
 SERVICE             STATUS   UPDATES
-default/helloworld  success  
+default/helloworld  success
 ```
 
 # Unlocking a Service
@@ -194,5 +189,5 @@ Unlocking a service allows it to have manual or automated releases
 $ fluxctl unlock --service=default/helloworld
 Commit pushed: 708b63a
 SERVICE             STATUS   UPDATES
-default/helloworld  success  
+default/helloworld  success
 ```

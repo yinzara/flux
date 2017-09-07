@@ -1,10 +1,5 @@
----
-title: How Weave Flux Works
-menu_order: 20
----
-
-This page describes the goals of flux, how it achieves them and 
-significant architectural decisions. It is intentionally high level 
+This page describes the goals of flux, how it achieves them and
+significant architectural decisions. It is intentionally high level
 to prevent it from being out of date too quickly.
 
 # Goals
@@ -70,10 +65,10 @@ In order to access private registries, credentials may be required.
 
 ## Deployment of Images
 
-Flux will only deploy different images. It will not re-deploy images 
+Flux will only deploy different images. It will not re-deploy images
 with the same tag.
- 
-Once a list of new images have been established, it will alter the 
+
+Once a list of new images have been established, it will alter the
 configuration of the cluster to deploy the new images.
 
 Images can be "locked" to a specific version. "locked" images won't be

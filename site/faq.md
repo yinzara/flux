@@ -1,8 +1,3 @@
----
-title: Weave Flux FAQ
-menu_order: 60
----
-
 ## General questions
 
 Also see [the introduction](/site/introduction.md).
@@ -28,7 +23,7 @@ This also forms a base to add features like Slack integration.
 
 ### Why should I automate deployment?
 
-Automation is a principle of lean development. It reduces waste, to 
+Automation is a principle of lean development. It reduces waste, to
 provide efficiency gains. It empowers employees by removing dull
 tasks. It mitigates against failure by avoiding silly mistakes.
 
@@ -41,7 +36,7 @@ system in order to read from and update the manifests.
 
 ### How do I give Flux access to a private registry?
 
-Provide Flux with the registry credentials. See 
+Provide Flux with the registry credentials. See
 [an example here](/site/using.md).
 
 ### How often does Flux check for new images?

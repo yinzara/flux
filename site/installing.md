@@ -1,8 +1,3 @@
----
-title: Installing Weave Flux
-menu_order: 30
----
-
 We recommend that you install Flux with Weave Cloud, our hosted service
 for accelerating cloud native development. Using Flux in conjunction
 with

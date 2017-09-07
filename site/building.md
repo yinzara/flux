@@ -1,8 +1,3 @@
----
-title: Building Weave Flux
-menu_order: 80
----
-
 # Build
 
 Ensure the repository is checked out into $GOPATH/src/github.com/weaveworks/flux.

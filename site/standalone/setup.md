@@ -1,8 +1,3 @@
----
-title: Setup Weave Flux Manually
-menu_order: 20
----
-
 # Connecting fluxctl to the daemon
 
 You need to tell `fluxctl` where to find the Flux API. If you're using
