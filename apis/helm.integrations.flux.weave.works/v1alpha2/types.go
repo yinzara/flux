@@ -21,8 +21,9 @@ type FluxHelmRelease struct {
 // FluxHelmReleaseSpec is the spec for a FluxHelmRelease resource
 // FluxHelmReleaseSpec
 type FluxHelmReleaseSpec struct {
-	ChartGitPath   string `json:"chartGitPath"`
-	ReleaseName    string `json:"releaseName,omitempty"`
+	ChartGitPath   string            `json:"chartGitPath"`
+	ReleaseName    string            `json:"releaseName,omitempty"`
+	Automation     map[string]string `json:"automation,omitempty"`
 	FluxHelmValues `json:",inline"`
 }
 
