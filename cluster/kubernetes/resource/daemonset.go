@@ -5,7 +5,7 @@ import (
 )
 
 type DaemonSet struct {
-	baseObject
+	BaseObject
 	Spec DaemonSetSpec
 }
 

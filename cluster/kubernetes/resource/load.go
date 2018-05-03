@@ -10,12 +10,16 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/weaveworks/flux/resource"
+	yaml "gopkg.in/yaml.v2"
 )
 
 // Load takes paths to directories or files, and creates an object set
 // based on the file(s) therein. Resources are named according to the
 // file content, rather than the file name of directory structure.
 func Load(base, atLeastOne string, more ...string) (map[string]resource.Resource, error) {
+	fmt.Printf("==> base=%s\n", base)
+	fmt.Printf("==> atLeastOne=%s\n", atLeastOne)
+
 	roots := append([]string{atLeastOne}, more...)
 	objs := map[string]resource.Resource{}
 	for _, root := range roots {
@@ -54,6 +58,7 @@ func Load(base, atLeastOne string, more ...string) (map[string]resource.Resource
 			return objs, err
 		}
 	}
+	fmt.Printf("==> returning %+v\n", objs)
 	return objs, nil
 }
 
@@ -93,7 +98,18 @@ func ParseMultidoc(multidoc []byte, source string) (map[string]resource.Resource
 		bytes := chunks.Bytes()
 		bytes2 := make([]byte, len(bytes), cap(bytes))
 		copy(bytes2, bytes)
-		if obj, err = unmarshalObject(source, bytes2); err != nil {
+
+		base := BaseObject{source: source, bytes: bytes2}
+		if err := yaml.Unmarshal(bytes, &base); err != nil {
+			return objs, errors.Wrapf(err, "scanning multidoc from %q", source)
+		}
+
+		// if crk, ok := CustomResourceKinds[strings.ToLower(base.Kind)]; ok {
+		// 	//unmarshalKind = crk.UnmarshalObject()
+		// } else {
+		// 	//	unmarshalKind = unmarshalKind(base, bytes2)
+		// }
+		if obj, err = unmarshalObject(base, unmarshalKind); err != nil {
 			return nil, errors.Wrapf(err, "parsing YAML doc from %q", source)
 		}
 		if obj == nil {

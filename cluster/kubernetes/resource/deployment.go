@@ -5,7 +5,7 @@ import (
 )
 
 type Deployment struct {
-	baseObject
+	BaseObject
 	Spec DeploymentSpec
 }
 

@@ -2,6 +2,8 @@ package kubernetes
 
 import (
 	"fmt"
+	"io"
+	"strings"
 
 	apiapps "k8s.io/api/apps/v1beta1"
 	apibatch "k8s.io/api/batch/v1beta1"
@@ -11,6 +13,7 @@ import (
 
 	"github.com/weaveworks/flux"
 	"github.com/weaveworks/flux/cluster"
+	k8sresource "github.com/weaveworks/flux/cluster/kubernetes/resource"
 	"github.com/weaveworks/flux/image"
 	"github.com/weaveworks/flux/resource"
 )
@@ -23,8 +26,19 @@ type resourceKind interface {
 	getPodControllers(c *Cluster, namespace string) ([]podController, error)
 }
 
+type customResourceKind struct {
+	//	Containers    func() []resource.Container
+	//  podTemplate apiv1.PodTemplateSpec
+	Kind          string
+	UnmarshalKind func(k8sresource.BaseObject, []byte) (resource.Resource, error)
+	//	GetPodController  func(c *Cluster, namespace, name string) (podController, error)
+	//	GetPodControllers func(c *Cluster, namespace string) ([]podController, error)
+	TryUpdate func([]byte, string, image.Ref, io.Writer) error
+}
+
 var (
-	resourceKinds = make(map[string]resourceKind)
+	resourceKinds       = make(map[string]resourceKind)
+	CustomResourceKinds = make(map[string]*customResourceKind)
 )
 
 func init() {
@@ -32,6 +46,13 @@ func init() {
 	resourceKinds["daemonset"] = &daemonSetKind{}
 	resourceKinds["deployment"] = &deploymentKind{}
 	resourceKinds["statefulset"] = &statefulSetKind{}
+
+	RegisterKind("FluxHelmRelease",
+		k8sresource.FHRUnmarshalKind,
+		// k8sresource.FHRGetPodController,
+		// k8sresource.FHRGetPodControllers,
+		k8sresource.FHRTryUpdate,
+	)
 }
 
 type podController struct {
@@ -43,7 +64,27 @@ type podController struct {
 	apiObject   interface{}
 }
 
+// RegisterKind allows to add an additional kind for possible automation
+func RegisterKind(kind string,
+	unmarshalKind func(k8sresource.BaseObject, []byte) (resource.Resource, error),
+	// getPodController func(c *Cluster, namespace, name string) (podController, error),
+	// getPodControllers func(c *Cluster, namespace string) ([]podController, error),
+	tryUpdate func([]byte, string, image.Ref, io.Writer) error) {
+
+	crk := customResourceKind{
+		Kind:          kind,
+		UnmarshalKind: unmarshalKind,
+		// GetPodController:  getPodController,
+		// GetPodControllers: getPodControllers,
+		TryUpdate: tryUpdate,
+	}
+
+	CustomResourceKinds[strings.ToLower(kind)] = &crk
+}
+
 func (pc podController) toClusterController(resourceID flux.ResourceID) cluster.Controller {
+	fmt.Printf("==> in toClusterController\n")
+
 	var clusterContainers []resource.Container
 	var excuse string
 	for _, container := range pc.podTemplate.Spec.Containers {

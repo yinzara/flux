@@ -5,7 +5,7 @@ import (
 )
 
 type CronJob struct {
-	baseObject
+	BaseObject
 	Spec CronJobSpec
 }
 

@@ -18,7 +18,7 @@ const (
 // -- unmarshaling code for specific object and field types
 
 // struct to embed in objects, to provide default implementation
-type baseObject struct {
+type BaseObject struct {
 	source string
 	bytes  []byte
 	Kind   string `yaml:"kind"`
@@ -29,7 +29,7 @@ type baseObject struct {
 	} `yaml:"metadata"`
 }
 
-func (o baseObject) ResourceID() flux.ResourceID {
+func (o BaseObject) ResourceID() flux.ResourceID {
 	ns := o.Meta.Namespace
 	if ns == "" {
 		ns = "default"
@@ -39,11 +39,11 @@ func (o baseObject) ResourceID() flux.ResourceID {
 
 // It's useful for comparisons in tests to be able to remove the
 // record of bytes
-func (o *baseObject) debyte() {
+func (o *BaseObject) debyte() {
 	o.bytes = nil
 }
 
-func (o baseObject) Policy() policy.Set {
+func (o BaseObject) Policy() policy.Set {
 	set := policy.Set{}
 	for k, v := range o.Meta.Annotations {
 		if strings.HasPrefix(k, PolicyPrefix) {
@@ -58,19 +58,23 @@ func (o baseObject) Policy() policy.Set {
 	return set
 }
 
-func (o baseObject) Source() string {
+func (o BaseObject) Source() string {
 	return o.source
 }
 
-func (o baseObject) Bytes() []byte {
+func (o BaseObject) Bytes() []byte {
 	return o.bytes
 }
 
-func unmarshalObject(source string, bytes []byte) (resource.Resource, error) {
-	var base = baseObject{source: source, bytes: bytes}
-	if err := yaml.Unmarshal(bytes, &base); err != nil {
-		return nil, err
-	}
+//func unmarshalObject(source string, bytes []byte) (resource.Resource, error) {
+func unmarshalObject(base BaseObject, unmarshalKind func(BaseObject, []byte) (resource.Resource, error)) (resource.Resource, error) {
+	// var base = BaseObject{source: source, bytes: bytes}
+	// if err := yaml.Unmarshal(bytes, &base); err != nil {
+	// 	return nil, err
+	// }
+
+	source := base.Source()
+	bytes := base.Bytes()
 	r, err := unmarshalKind(base, bytes)
 	if err != nil {
 		return nil, makeUnmarshalObjectErr(source, err)
@@ -78,34 +82,34 @@ func unmarshalObject(source string, bytes []byte) (resource.Resource, error) {
 	return r, nil
 }
 
-func unmarshalKind(base baseObject, bytes []byte) (resource.Resource, error) {
+func unmarshalKind(base BaseObject, bytes []byte) (resource.Resource, error) {
 	switch base.Kind {
 	case "CronJob":
-		var cj = CronJob{baseObject: base}
+		var cj = CronJob{BaseObject: base}
 		if err := yaml.Unmarshal(bytes, &cj); err != nil {
 			return nil, err
 		}
 		return &cj, nil
 	case "DaemonSet":
-		var ds = DaemonSet{baseObject: base}
+		var ds = DaemonSet{BaseObject: base}
 		if err := yaml.Unmarshal(bytes, &ds); err != nil {
 			return nil, err
 		}
 		return &ds, nil
 	case "Deployment":
-		var dep = Deployment{baseObject: base}
+		var dep = Deployment{BaseObject: base}
 		if err := yaml.Unmarshal(bytes, &dep); err != nil {
 			return nil, err
 		}
 		return &dep, nil
 	case "Namespace":
-		var ns = Namespace{baseObject: base}
+		var ns = Namespace{BaseObject: base}
 		if err := yaml.Unmarshal(bytes, &ns); err != nil {
 			return nil, err
 		}
 		return &ns, nil
 	case "StatefulSet":
-		var ss = StatefulSet{baseObject: base}
+		var ss = StatefulSet{BaseObject: base}
 		if err := yaml.Unmarshal(bytes, &ss); err != nil {
 			return nil, err
 		}
