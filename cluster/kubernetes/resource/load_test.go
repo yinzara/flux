@@ -10,8 +10,8 @@ import (
 )
 
 // for convenience
-func base(source, kind, namespace, name string) baseObject {
-	b := baseObject{source: source, Kind: kind}
+func base(source, kind, namespace, name string) BaseObject {
+	b := BaseObject{source: source, Kind: kind}
 	b.Meta.Namespace = namespace
 	b.Meta.Name = name
 	return b
@@ -48,8 +48,8 @@ metadata:
 	objA := base("test", "Deployment", "", "a-deployment")
 	objB := base("test", "Deployment", "b-namespace", "b-deployment")
 	expected := map[string]resource.Resource{
-		objA.ResourceID().String(): &Deployment{baseObject: objA},
-		objB.ResourceID().String(): &Deployment{baseObject: objB},
+		objA.ResourceID().String(): &Deployment{BaseObject: objA},
+		objB.ResourceID().String(): &Deployment{BaseObject: objB},
 	}
 
 	for id, obj := range expected {
@@ -80,8 +80,8 @@ metadata:
 	objA := base("test", "Deployment", "", "a-deployment")
 	objB := base("test", "Deployment", "b-namespace", "b-deployment")
 	expected := map[string]resource.Resource{
-		objA.ResourceID().String(): &Deployment{baseObject: objA},
-		objB.ResourceID().String(): &Deployment{baseObject: objB},
+		objA.ResourceID().String(): &Deployment{BaseObject: objA},
+		objB.ResourceID().String(): &Deployment{BaseObject: objB},
 	}
 	expectedL := len(expected)
 
