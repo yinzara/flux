@@ -1,7 +1,7 @@
 definitions:
   services:
     memcache:
-      image: memcache
+      image: memcached
 pipelines:
   default:
     - step:
