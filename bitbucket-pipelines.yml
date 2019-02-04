@@ -3,10 +3,10 @@ pipelines:
     - step:
         image: circleci/golang:1.10
         script:
-          - export FLUX_GO_HOME=/go/src/github.com/weaveworks
-          - mkdir -p $FLUX_GO_HOME
-          - ln -s $BITBUCKET_CLONE_DIR $FLUX_GO_HOME
-          - cd /go/src/github.com/weaveworks/flux
+          - export WEAVEWORKS_GO_HOME=/go/src/github.com/weaveworks
+          - mkdir -p $WEAVEWORKS_GO_HOME
+          - ln -s $BITBUCKET_CLONE_DIR $WEAVEWORKS_GO_HOME/flux
+          - cd $WEAVEWORKS_GO_HOME/flux
           - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
           - dep ensure -vendor-only
           - make check-generated
