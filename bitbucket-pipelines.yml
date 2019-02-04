@@ -12,7 +12,7 @@ pipelines:
           - make check-generated
           - make test TEST_FLAGS="-race -tags integration -timeout 60s"
           - make all
-          - docker login -u _json_key -p '$GCR_JSON_KEY_1ST_DEV' https://us.gcr.io
+          - echo ${GCR_JSON_KEY_1ST_DEV} | docker login -u _json_key --password-stdin https://us.gcr.io
           - |
             docker push
             us.gcr.io/first-gaming-dev/flux-helm-operator
