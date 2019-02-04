@@ -21,5 +21,6 @@ pipelines:
             us.gcr.io/first-gaming-dev/flux-flux:$(docker/image-tag)
         services:
           - docker
+          - memcache
         caches:
           - docker
