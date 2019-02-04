@@ -1,0 +1,25 @@
+pipelines:
+  default:
+    - step:
+        image: circleci/golang:1.10
+        script:
+          - export FLUX_GO_HOME=/go/src/github.com/weaveworks
+          - mkdir -p $FLUX_GO_HOME
+          - ln -s $BITBUCKET_CLONE_DIR $FLUX_GO_HOME
+          - cd /go/src/github.com/weaveworks/flux
+          - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+          - dep ensure -vendor-only
+          - make check-generated
+          - make test TEST_FLAGS="-race -tags integration -timeout 60s"
+          - make all
+          - docker login -u _json_key -p $GCR_JSON_KEY_1ST_DEV https://us.gcr.io
+          - |
+            docker push
+            us.gcr.io/first-gaming-dev/flux-helm-operator
+            us.gcr.io/first-gaming-dev/flux-helm-operator:$(docker/image-tag)
+            us.gcr.io/first-gaming-dev/flux-flux
+            us.gcr.io/first-gaming-dev/flux-flux:$(docker/image-tag)
+        services:
+          - docker
+        caches:
+          - docker
