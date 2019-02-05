@@ -22,21 +22,6 @@ pipelines:
         caches:
           - docker
           - dep
-    - step:
-        name: Tag Docker images
-        image: google/cloud-sdk
-        script:
-          - export CLOUDSDK_CORE_DISABLE_PROMPTS=1
-          - echo ${GCR_JSON_KEY_1ST_DEV} > client-secret.json
-          - gcloud auth activate-service-account --key-file client-secret.json
-          - |
-            gcloud container images add-tag
-            us.gcr.io/first-gaming-dev/flux-helm-operator:$(docker/image-tag)
-            us.gcr.io/first-gaming-dev/flux-helm-operator:$BRANCH_NAME-$(docker/image-tag)
-          - |
-            gcloud container images add-tag
-            us.gcr.io/first-gaming-dev/flux-flux:$(docker/image-tag)
-            us.gcr.io/first-gaming-dev/flux-flux:$BRANCH_NAME-$(docker/image-tag)
 definitions:
   services:
     memcache:
