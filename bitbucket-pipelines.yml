@@ -1,6 +1,7 @@
 pipelines:
   default:
     - step:
+        name: Build Docker images
         image: circleci/golang:1.10
         script:
           - export WEAVEWORKS_GO_HOME=/go/src/github.com/weaveworks
@@ -13,18 +14,29 @@ pipelines:
           - make test TEST_FLAGS="-race -tags integration -timeout 60s"
           - make all
           - echo ${GCR_JSON_KEY_1ST_DEV} | docker login -u _json_key --password-stdin https://us.gcr.io
-          - |
-            docker push
-            us.gcr.io/first-gaming-dev/flux-helm-operator
-            us.gcr.io/first-gaming-dev/flux-helm-operator:$(docker/image-tag)
-            us.gcr.io/first-gaming-dev/flux-flux
-            us.gcr.io/first-gaming-dev/flux-flux:$(docker/image-tag)
+          - docker push us.gcr.io/first-gaming-dev/flux-helm-operator:$(docker/image-tag)
+          - docker push us.gcr.io/first-gaming-dev/flux-flux:$(docker/image-tag)
         services:
           - docker
           - memcache
         caches:
           - docker
           - dep
+    - step:
+        name: Tag Docker images
+        image: google/cloud-sdk
+        script:
+          - export CLOUDSDK_CORE_DISABLE_PROMPTS=1
+          - echo ${GCR_JSON_KEY_1ST_DEV} > client-secret.json
+          - gcloud auth activate-service-account --key-file client-secret.json
+          - |
+            gcloud container images add-tag
+            us.gcr.io/first-gaming-dev/flux-helm-operator:$(docker/image-tag)
+            us.gcr.io/first-gaming-dev/flux-helm-operator:$BRANCH_NAME-$(docker/image-tag)
+          - |
+            gcloud container images add-tag
+            us.gcr.io/first-gaming-dev/flux-flux:$(docker/image-tag)
+            us.gcr.io/first-gaming-dev/flux-flux:$BRANCH_NAME-$(docker/image-tag)
 definitions:
   services:
     memcache:
